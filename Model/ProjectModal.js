@@ -6,9 +6,11 @@ const projectSchema = mongoose.Schema({
     projectImg: String ,
     desc: String,
     siteLink: String,
+    likedUser:[],
     likeCount:Number,
+
 })
 
-const project =mongoose.model("project", projectSchema)
+const Project =mongoose.model("project", projectSchema)
 
-export default project
+export default Project
