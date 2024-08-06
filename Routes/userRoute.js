@@ -40,7 +40,7 @@ router.get("/count", async (req, res) => {
   // const data = await vistorCount.create({count:0, RecentVist: []})
   const data = await vistorCount.updateOne(
     { _id: "66b1c9183f675b3f2078b814" },
-    { $inc: { count: 1 }, $push: { RecentVist: new Date(now) } },
+    { $inc: { count: 1 }, $push: { RecentVist: new Date() } },
   );
   res.json(data);
 });
@@ -113,7 +113,7 @@ router.put("/add/like-project/:id", usetAuthentication, async (req, res) => {
 router.post("/singup", async (req, res) => {
   const newPassword = req.body.password;
   const password = await bcrypt.hash(newPassword, 10);
-  const createdAt = new Date(now);
+  const createdAt = new Date();
   try {
     const newUser = await User.create({ ...req.body, password, createdAt });
 
@@ -150,7 +150,7 @@ router.get("/auth/project", async (req, res) => {
 });
 
 router.post("/contact", async (req, res) => {
-  const newMessage = await Contact.create({...req.body, createdAt: new Date(now)})
+  const newMessage = await Contact.create({...req.body, createdAt: new Date()})
   console.log(req.body)
   res.json({msg:"Thanks for message "})
 })
