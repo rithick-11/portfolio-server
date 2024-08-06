@@ -52,14 +52,13 @@ router.get("/vist-count", async (req, res) => {
 });
 
 router.get("/project", isUserAuthorized, async (req, res) => {
-  const projectList = await Project.find();
+  const projectList = await Project.find().sort({order:1});
   if (req.body.userAuthorized) {
     const { username } = req.body.user;
     const authProject = projectList.map((each) => {
       const { likedUser } = each;
       const isLiked = likedUser.some((each) => each.username === username);
       return {
-        project: each,
         _id: each._id,
         name: each.name,
         desc: each.desc,
@@ -73,7 +72,6 @@ router.get("/project", isUserAuthorized, async (req, res) => {
   } else {
     res.json(
       projectList.map((each) => ({
-        project: each,
         _id: each._id,
         name: each.name,
         desc: each.desc,
