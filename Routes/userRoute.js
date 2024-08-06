@@ -46,7 +46,8 @@ router.get("/count", async (req, res) => {
 
 router.get("/vist-count", async (req, res) => {
   const count = await vistorCount.findOne({ _id: "66b1c9183f675b3f2078b814" });
-  res.json(count);
+  const messages = await Contact.find()
+  res.json({count, messages});
 });
 
 router.get("/project", isUserAuthorized, async (req, res) => {
