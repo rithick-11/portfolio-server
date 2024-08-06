@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 
 import Project from "../Model/ProjectModal.js";
 import User from "../Model/UserModel.js";
+import Contact from "../Model/contactModel.js";
 
 import usetAuthentication from "../MiddleWare/userAuthentication.js";
 import isUserAuthorized from "../MiddleWare/isUserAuthorized.js";
@@ -145,6 +146,12 @@ router.get("/auth/project", async (req, res) => {
   const projectList = await Project.find();
   res.json("ok");
 });
+
+router.post("/contact", async (req, res) => {
+  const newMessage = await Contact.create(req.body)
+  console.log(req.body)
+  res.json({msg:"Thanks for message "})
+})
 
 router.get("/data", usetAuthentication, async (req, res) => {
   const {username} = req.body.user
