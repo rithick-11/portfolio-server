@@ -1,9 +1,10 @@
-import mongoose from "mongoose";
+import mongoose, { now } from "mongoose";
 
 const contactSchema = mongoose.Schema({
     name:String,
     email:String,
-    message:String
+    message:String,
+    createdAt: {default : () => new Date(now)} 
 })
 
 const Contact =mongoose.model("contact", contactSchema)
