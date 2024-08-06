@@ -4,7 +4,7 @@ const contactSchema = mongoose.Schema({
     name:String,
     email:String,
     message:String,
-    createdAt: {default : () => new Date(now)} 
+    createdAt: Date
 })
 
 const Contact =mongoose.model("contact", contactSchema)
