@@ -145,4 +145,12 @@ router.get("/auth/project", async (req, res) => {
   const projectList = await Project.find();
   res.json("ok");
 });
+
+router.get("/data", usetAuthentication, async (req, res) => {
+  const {username} = req.body.user
+  const userData = await User.findOne({username: username},{password:0,email:0})
+  res.json(userData)
+})
+
+
 export default router;

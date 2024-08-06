@@ -7,7 +7,7 @@ const projectSchema = mongoose.Schema({
     desc: String,
     siteLink: String,
     likedUser:[],
-    likeCount:Number,
+    order:Number,
 
 })
 
