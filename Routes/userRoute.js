@@ -40,19 +40,19 @@ router.get("/count", async (req, res) => {
   // const data = await vistorCount.create({count:0, RecentVist: []})
   const data = await vistorCount.updateOne(
     { _id: "66b1c9183f675b3f2078b814" },
-    { $inc: { count: 1 }, $push: { RecentVist: new Date() } },
+    { $inc: { count: 1 }, $push: { RecentVist: new Date() } }
   );
   res.json(data);
 });
 
 router.get("/vist-count", async (req, res) => {
   const count = await vistorCount.findOne({ _id: "66b1c9183f675b3f2078b814" });
-  const messages = await Contact.find()
-  res.json({count, messages});
+  const messages = await Contact.find();
+  res.json({ count, messages });
 });
 
 router.get("/project", isUserAuthorized, async (req, res) => {
-  const projectList = await Project.find().sort({order:1});
+  const projectList = await Project.find().sort({ order: 1 });
   if (req.body.userAuthorized) {
     const { username } = req.body.user;
     const authProject = projectList.map((each) => {
@@ -122,6 +122,23 @@ router.post("/singup", async (req, res) => {
   }
 });
 
+router.post("/add-guest", async (req, res) => {
+  const ranNum = Math.floor(Math.random() * (100000 + 1000)) + 1000;
+  const guestUser = {
+    username: `guest-${ranNum}`,
+    name: `guest${ranNum}`,
+    email: `guest${ranNum}@mail.com`,
+    password: "password",
+    createdAt: new Date(),
+  };
+try{
+  res.status(201).json({guest: guestUser, msg:"Are you okey with this data"})
+}catch(err){
+  console.log(err)
+  res.status(404).json({msg:"sorry we cannot fetch dummy data from server"})
+}
+});
+
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
   const getUser = await User.findOne({ username: username });
@@ -148,16 +165,21 @@ router.get("/auth/project", async (req, res) => {
 });
 
 router.post("/contact", async (req, res) => {
-  const newMessage = await Contact.create({...req.body, createdAt: new Date()})
-  console.log(req.body)
-  res.json({msg:"Thanks for message "})
-})
+  const newMessage = await Contact.create({
+    ...req.body,
+    createdAt: new Date(),
+  });
+  console.log(req.body);
+  res.json({ msg: "Thanks for message " });
+});
 
 router.get("/data", usetAuthentication, async (req, res) => {
-  const {username} = req.body.user
-  const userData = await User.findOne({username: username},{password:0,email:0})
-  res.json(userData)
-})
-
+  const { username } = req.body.user;
+  const userData = await User.findOne(
+    { username: username },
+    { password: 0, email: 0 }
+  );
+  res.json(userData);
+});
 
 export default router;
