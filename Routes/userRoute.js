@@ -135,7 +135,7 @@ try{
   res.status(201).json({guest: guestUser, msg:"Are you okey with this data"})
 }catch(err){
   console.log(err)
-  res.status(404).json({msg:"sorry we cannot fetch dummy data from server"})
+  res.status(404).json({msg:"sorry we cannot genarate dummy data from server"})
 }
 });
 
