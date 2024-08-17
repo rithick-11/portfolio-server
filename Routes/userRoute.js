@@ -97,11 +97,13 @@ router.put("/add/like-project/:id", usetAuthentication, async (req, res) => {
         username: user.username,
         likedAt: new Date(),
       };
-      const prject = await Project.updateOne(
+      const resp = await Project.updateOne(
         { _id: pId },
         { $push: { likedUser: liked } }
       );
-      res.json({ msg: "Thanks for liking" });
+      const projectDb = await Project.findOne({_id: pId})
+      const likeCount = projectDb.likedUser.length
+      res.json({ msg: "Thanks for liking", likeCount});
     }
   } catch (err) {
     console.log(err);
