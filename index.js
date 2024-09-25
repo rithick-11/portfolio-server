@@ -29,6 +29,6 @@ app.use(cors())
 ///app routes
 
 app.use("/user", userRouter)
-app.use("/admin", adminRouter )
+app.use("/admin", adminRouter)
 
 startServerAndConnectDb()
