@@ -31,4 +31,8 @@ app.use(cors())
 app.use("/user", userRouter)
 app.use("/admin", adminRouter)
 
+app.get("/", (req, res) => {
+    res.json({data: req.headers})
+})
+
 startServerAndConnectDb()
