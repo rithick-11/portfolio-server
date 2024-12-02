@@ -32,7 +32,12 @@ app.use("/user", userRouter)
 app.use("/admin", adminRouter)
 
 app.get("/", (req, res) => {
-    res.json({data: req.headers})
+    const record = {
+        location: req.headers["x-vercel-ip-city"],
+        platform: req.headers["sec-ch-ua-platform"],
+        browser: req.headers["sec-ch-ua"]
+    }
+    res.json({data: req.headers, record})
 })
 
 startServerAndConnectDb()
