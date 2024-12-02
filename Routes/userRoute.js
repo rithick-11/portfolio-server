@@ -38,9 +38,14 @@ const handelErr = (err) => {
 
 router.get("/count", async (req, res) => {
   // const data = await vistorCount.create({count:0, RecentVist: []})
+  const record = {
+    location: req.headers["x-vercel-ip-city"],
+    platform: req.headers["sec-ch-ua-platform"],
+    browser: req.headers["sec-ch-ua"],
+  };
   const data = await vistorCount.updateOne(
     { _id: "66b1c9183f675b3f2078b814" },
-    { $inc: { count: 1 }, $push: { RecentVist: new Date() } }
+    { $inc: { count: 1 }, $push: { RecentVist: { date: new Date(), record } } }
   );
   res.json(data);
 });
@@ -101,9 +106,9 @@ router.put("/add/like-project/:id", usetAuthentication, async (req, res) => {
         { _id: pId },
         { $push: { likedUser: liked } }
       );
-      const projectDb = await Project.findOne({_id: pId})
-      const likeCount = projectDb.likedUser.length
-      res.json({ msg: "Thanks for liking", likeCount});
+      const projectDb = await Project.findOne({ _id: pId });
+      const likeCount = projectDb.likedUser.length;
+      res.json({ msg: "Thanks for liking", likeCount });
     }
   } catch (err) {
     console.log(err);
@@ -133,12 +138,16 @@ router.post("/add-guest", async (req, res) => {
     password: "password",
     createdAt: new Date(),
   };
-try{
-  res.status(201).json({guest: guestUser, msg:"Are you okey with this data"})
-}catch(err){
-  console.log(err)
-  res.status(404).json({msg:"sorry we cannot genarate dummy data from server"})
-}
+  try {
+    res
+      .status(201)
+      .json({ guest: guestUser, msg: "Are you okey with this data" });
+  } catch (err) {
+    console.log(err);
+    res
+      .status(404)
+      .json({ msg: "sorry we cannot genarate dummy data from server" });
+  }
 });
 
 router.post("/login", async (req, res) => {
