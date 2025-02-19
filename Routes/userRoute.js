@@ -180,7 +180,6 @@ router.post("/contact", async (req, res) => {
     ...req.body,
     createdAt: new Date(),
   });
-  console.log(req.body);
   res.json({ msg: "Thanks for message " });
 });
 
