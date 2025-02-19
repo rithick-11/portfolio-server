@@ -46,16 +46,18 @@ app.get("/api/cyberlane/vistcount", async (req, res) => {
     platform: req.headers["sec-ch-ua-platform"],
     browser: req.headers["sec-ch-ua"],
   };
+
   const data = await CyberLaneVistCount.updateOne(
-    { _id: "66b1c9183f675b3f2078b814" },
+    { _id: "67b5ddd8fa9810d7745d9c54" },
     { $inc: { count: 1 }, $push: { RecentVist: { date: new Date(), record } } }
   );
+  
   res.json(data);
 });
 
 app.get("/cyberlanevist/count", async (req, res) => {
   const count = await CyberLaneVistCount.findOne({
-    _id: "66b1c9183f675b3f2078b814",
+    _id: "67b5ddd8fa9810d7745d9c54",
   });
   res.json({ count });
 });
