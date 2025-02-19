@@ -53,7 +53,7 @@ app.get("/api/cyberlane/vistcount", async (req, res) => {
   res.json(data);
 });
 
-router.get("/cyberlanevist/count", async (req, res) => {
+app.get("/cyberlanevist/count", async (req, res) => {
   const count = await CyberLaneVistCount.findOne({
     _id: "66b1c9183f675b3f2078b814",
   });
