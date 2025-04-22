@@ -10,6 +10,7 @@ import usetAuthentication from "../MiddleWare/userAuthentication.js";
 import isUserAuthorized from "../MiddleWare/isUserAuthorized.js";
 import vistorCount from "../Model/visterCount.js";
 import { now } from "mongoose";
+import { sendAutoReply } from "../utils/mail.js";
 
 const router = Router();
 
@@ -176,10 +177,12 @@ router.get("/auth/project", async (req, res) => {
 });
 
 router.post("/contact", async (req, res) => {
+  const {name, email, message} = req.body
   const newMessage = await Contact.create({
     ...req.body,
     createdAt: new Date(),
   });
+  sendAutoReply(email, name)  
   res.json({ msg: "Thanks for message " });
 });
 
