@@ -83,7 +83,7 @@ app.get("/api/konix/capital-gains", (req, res) => {
 });
 
 
-app.get("/api/konix/holdings ", (req, res) => {
+app.get("/api/konix/holdings", (req, res) => {
   const data = koinxHolding
   return res.status(202).json(data);
 });
