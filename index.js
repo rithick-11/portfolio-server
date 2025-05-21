@@ -6,6 +6,7 @@ import cors from "cors";
 import userRouter from "./Routes/userRoute.js";
 import adminRouter from "./Routes/adminRoute.js";
 import CyberLaneVistCount from "./Model/CyberLaneModel.js";
+import { koinxHolding } from "./utils/constants.js";
 
 dotenv.config();
 
@@ -51,7 +52,7 @@ app.get("/api/cyberlane/vistcount", async (req, res) => {
     { _id: "67b5ddd8fa9810d7745d9c54" },
     { $inc: { count: 1 }, $push: { RecentVist: { date: new Date(), record } } }
   );
-  
+
   res.json(data);
 });
 
@@ -60,6 +61,29 @@ app.get("/cyberlanevist/count", async (req, res) => {
     _id: "67b5ddd8fa9810d7745d9c54",
   });
   res.json({ count });
+});
+
+app.get("/api/konix/capital-gains", (req, res) => {
+  const data = {
+    capitalGains: {
+      stcg: {
+        profits: 70200.88,
+        losses: 1548.53,
+      },
+      ltcg: {
+        profits: 5020,
+        losses: 3050,
+      },
+    },
+  };
+
+  return res.status(202).json(data);
+});
+
+
+app.get("/api/konix/holdings ", (req, res) => {
+  const data = koinxHolding
+  return res.status(202).json(data);
 });
 
 startServerAndConnectDb();
