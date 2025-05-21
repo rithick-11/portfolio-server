@@ -63,6 +63,8 @@ app.get("/cyberlanevist/count", async (req, res) => {
   res.json({ count });
 });
 
+
+
 app.get("/api/konix/capital-gains", (req, res) => {
   const data = {
     capitalGains: {
