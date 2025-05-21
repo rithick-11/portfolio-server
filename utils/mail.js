@@ -23,6 +23,7 @@ export const sendAutoReply = async (mail, name) => {
       text: `Hi ${name || "Sir/Mam"},
 
 Thanks for reaching out!
+
 Your message has been received successfully. I’ll get back to you as soon as possible, If a response is needed.
 
 Best regards,
