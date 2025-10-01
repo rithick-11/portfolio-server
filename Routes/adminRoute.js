@@ -37,11 +37,17 @@ router.post("/add/project", async (req, res) => {
 router.get("/vist-count", async (req, res) => {
   const count = await vistorCount
     .findOne({ _id: "66b1c9183f675b3f2078b814" })
-    .sort({ RecentVist: 1 });
-  const messages = await Contact.find({}, { email: 0 }).sort({
+    .sort({ date: -1, createdAt: -1 });
+  const messages = await Contact.find({}).sort({
     createdAt: -1,
   });
-  res.json({ count: count.count, recentVist: count.RecentVist, messages });
+
+
+  return res.json({
+    count: count.count,
+    recentVist: count.RecentVist.reverse(),
+    messages,
+  });
 });
 
 router.get("/user-detial", async (req, res) => {
