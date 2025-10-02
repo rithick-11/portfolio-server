@@ -42,7 +42,6 @@ router.get("/vist-count", async (req, res) => {
     createdAt: -1,
   });
 
-
   return res.json({
     count: count.count,
     recentVist: count.RecentVist.reverse(),
@@ -63,16 +62,9 @@ router.get("/user-detial", async (req, res) => {
 
 router.get("/projects", async (req, res) => {
   try {
-    const projectData = await Project.find(
-      {},
-      { name: -1, likedUser: -1 }
-    ).sort({ order: 1 });
-    const data = projectData.map((each) => ({
-      id: each._id,
-      name: each.name,
-      likes: each.likedUser.length,
-    }));
-    res.json({ projects: data, total: projectData.length });
+    const projectData = await Project.find().sort({ order: 1 });
+    console.log(projectData);
+    res.json({ projects: projectData, total: projectData.length });
   } catch (err) {
     res.json({ msg: "we cannot feed data" });
   }
@@ -80,10 +72,8 @@ router.get("/projects", async (req, res) => {
 
 router.get("/project/:id", async (req, res) => {
   try {
-    const projectData = await Project.findOne({ _id: req.params.id }).sort({
-      order: 1,
-    });
-    res.json({ projects: projectData, total: projectData.length });
+    const projectData = await Project.findOne({ _id: req.params.id });
+    return res.json({ project: projectData });
   } catch (err) {
     res.json({ msg: "we cannot feed data" });
   }
