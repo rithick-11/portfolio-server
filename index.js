@@ -40,7 +40,7 @@ app.get("/", (req, res) => {
   };
   res.json({ data: req.headers, record });
 });
-
+  
 app.get("/api/cyberlane/vistcount", async (req, res) => {
   const record = {
     location: req.headers["x-vercel-ip-city"],

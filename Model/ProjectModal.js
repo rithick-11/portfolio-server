@@ -8,7 +8,7 @@ const projectSchema = mongoose.Schema({
   siteLink: String,
   likedUser: [],
   order: Number,
-  techStack: [String],
+  techStack: [String],  
   sourceCode: String,
 });
 
