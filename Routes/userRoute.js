@@ -57,37 +57,45 @@ router.get("/vist-count", async (req, res) => {
   res.json({ count, messages });
 });
 
+// {
+//         _id: each._id,
+//         name: each.name,
+//         desc: each.desc,
+//         projectImg: each.projectImg,
+//         siteLink: each.siteLink,
+//         likes: likedUser.length,
+//         isLiked,
+//       };
+
 router.get("/project", isUserAuthorized, async (req, res) => {
-  const projectList = await Project.find().sort({ order: 1 });
-  if (req.body.userAuthorized) {
-    const { username } = req.body.user;
-    const authProject = projectList.map((each) => {
-      const { likedUser } = each;
-      const isLiked = likedUser.some((each) => each.username === username);
+  let projectList = await Project.find().sort({ order: 1 });
+  console.log(req.body.userAuthorized);
+  console.log(req.body);
+  if (!req.body.userAuthorized) {
+    projectList = projectList.map((project) => {
       return {
-        _id: each._id,
-        name: each.name,
-        desc: each.desc,
-        projectImg: each.projectImg,
-        siteLink: each.siteLink,
-        likes: likedUser.length,
-        isLiked,
+        ...project.toObject(),
+        likes: project.likedUser.length,
+        isLiked: false,
+        likedUser: [],
       };
     });
-    res.json(authProject);
-  } else {
-    res.json(
-      projectList.map((each) => ({
-        _id: each._id,
-        name: each.name,
-        desc: each.desc,
-        projectImg: each.projectImg,
-        siteLink: each.siteLink,
-        likes: each.likedUser.length,
-        isLiked: false,
-      }))
-    );
+    return res.json({ projects: projectList, total: projectList.length });
   }
+
+  projectList = projectList.map((project) => {
+    const { likedUser } = project;
+    const isLiked = likedUser.some(
+      (each) => each.userId === req.body.userAuthorized.userId
+    );
+    return {
+      ...project.toObject(),
+      likes: likedUser.length,
+      isLiked,
+      likedUser: [],
+    };
+  });
+  return res.json({ projects: projectList, total: projectList.length });
 });
 
 router.put("/add/like-project/:id", usetAuthentication, async (req, res) => {
@@ -177,12 +185,12 @@ router.get("/auth/project", async (req, res) => {
 });
 
 router.post("/contact", async (req, res) => {
-  const {name, email, message} = req.body
+  const { name, email, message } = req.body;
   const newMessage = await Contact.create({
     ...req.body,
     createdAt: new Date(),
   });
-  sendAutoReply(email, name)  
+  sendAutoReply(email, name);
   res.json({ msg: "Thanks for message " });
 });
 

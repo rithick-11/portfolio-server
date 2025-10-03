@@ -62,8 +62,9 @@ router.get("/user-detial", async (req, res) => {
 
 router.get("/projects", async (req, res) => {
   try {
-    const projectData = await Project.find().sort({ order: 1 });
-    console.log(projectData);
+    const projectData = await Project.find({}, { likedUser: 0 }).sort({
+      order: 1,
+    });
     res.json({ projects: projectData, total: projectData.length });
   } catch (err) {
     res.json({ msg: "we cannot feed data" });
@@ -72,8 +73,29 @@ router.get("/projects", async (req, res) => {
 
 router.get("/project/:id", async (req, res) => {
   try {
-    const projectData = await Project.findOne({ _id: req.params.id });
+    const projectData = await Project.findOne(
+      { _id: req.params.id },
+      { likedUser: 0 }
+    )
     return res.json({ project: projectData });
+  } catch (err) {
+    res.json({ msg: "we cannot feed data" });
+  }
+});
+
+router.put("/project/update/:id", async (req, res) => {
+  try {
+    console.log(req.body);
+    const projectData = await Project.updateOne(
+      { _id: req.params.id },
+      { $set: req.body },
+
+      { runValidators: true }
+    );
+    const projects = await Project.find({}, { likedUser: 0 }).sort({
+      order: 1,
+    });
+    return res.json({ project: projectData, projects });
   } catch (err) {
     res.json({ msg: "we cannot feed data" });
   }
