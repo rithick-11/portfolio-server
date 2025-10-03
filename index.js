@@ -24,7 +24,7 @@ const startServerAndConnectDb = async () => {
   }
 };
 
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 app.use(cors());
 
 ///app routes
@@ -40,7 +40,7 @@ app.get("/", (req, res) => {
   };
   res.json({ data: req.headers, record });
 });
-  
+
 app.get("/api/cyberlane/vistcount", async (req, res) => {
   const record = {
     location: req.headers["x-vercel-ip-city"],
@@ -63,8 +63,6 @@ app.get("/cyberlanevist/count", async (req, res) => {
   res.json({ count });
 });
 
-
-
 app.get("/api/konix/capital-gains", (req, res) => {
   const data = {
     capitalGains: {
@@ -82,9 +80,8 @@ app.get("/api/konix/capital-gains", (req, res) => {
   return res.status(202).json(data);
 });
 
-
 app.get("/api/konix/holdings", (req, res) => {
-  const data = koinxHolding
+  const data = koinxHolding;
   return res.status(202).json(data);
 });
 

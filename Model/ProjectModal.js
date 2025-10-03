@@ -10,6 +10,7 @@ const projectSchema = mongoose.Schema({
   order: Number,
   techStack: [String],  
   sourceCode: String,
+  imgPublicId: String,
 });
 
 const Project = mongoose.model("project", projectSchema);

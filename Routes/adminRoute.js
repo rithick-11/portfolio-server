@@ -4,6 +4,7 @@ import Admin from "../Model/adminModel.js";
 import vistorCount from "../Model/visterCount.js";
 import Contact from "../Model/contactModel.js";
 import User from "../Model/UserModel.js";
+import { uploadBase64ToCloudinary } from "../utils/cloudinary.js";
 
 const router = Router();
 
@@ -76,7 +77,7 @@ router.get("/project/:id", async (req, res) => {
     const projectData = await Project.findOne(
       { _id: req.params.id },
       { likedUser: 0 }
-    )
+    );
     return res.json({ project: projectData });
   } catch (err) {
     res.json({ msg: "we cannot feed data" });
@@ -99,6 +100,29 @@ router.put("/project/update/:id", async (req, res) => {
   } catch (err) {
     res.json({ msg: "we cannot feed data" });
   }
+});
+
+router.post("/project/new", async (req, res) => {
+  const newProject = req.body;
+
+  try {
+    const { url, publicId } = await uploadBase64ToCloudinary(
+      newProject.projectImg
+    );
+    const project = await Project.create({
+      ...newProject,
+      projectImg: url,
+      imgPublicId: publicId,
+    });
+    const projects = await Project.find({}, { likedUser: 0 }).sort({
+      order: 1,
+    });
+    res.json({ project, projects });
+  } catch (err) {
+    console.log(err);
+  }
+  console.log(req.body);
+  return res.json({ msg: "ok" });
 });
 
 export default router;

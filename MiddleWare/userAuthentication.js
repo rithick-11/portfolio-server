@@ -1,15 +1,62 @@
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
 const usetAuthentication = async (req, res, next) => {
-    const token = req.headers.authoriaztion.split(" ")[1]
-    try{
-        const {userId, username} = await jwt.verify(token, "rithick")
-        req.body.user = {username, userId}
-        next()
-    }catch(err){
-        res.status(404).json({msg:"invalid token"})
+  try {
+    const authHeader = req.headers.authorization; // Fixed typo: authoriaztion -> authorization
+
+    if (!authHeader) {
+      return res.status(401).json({
+        success: false,
+        msg: "Authorization header missing. Please login.",
+      });
     }
 
-}
+    if (!authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({
+        success: false,
+        msg: "Invalid token format. Use 'Bearer <token>'",
+      });
+    }
 
-export default usetAuthentication
+    const token = authHeader.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        msg: "Token not provided",
+      });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "rithick"); // Use env variable
+
+    req.body.user = {
+      userId: decoded.userId,
+      username: decoded.username,
+    };
+
+    next();
+  } catch (err) {
+    console.error("Authentication Error:", err);
+
+    if (err.name === "JsonWebTokenError") {
+      return res.status(401).json({
+        success: false,
+        msg: "Invalid token",
+      });
+    }
+
+    if (err.name === "TokenExpiredError") {
+      return res.status(401).json({
+        success: false,
+        msg: "Token expired. Please login again.",
+      });
+    }
+    
+    return res.status(500).json({
+      success: false,
+      msg: "Authentication failed",
+    });
+  }
+};
+
+export default usetAuthentication;
